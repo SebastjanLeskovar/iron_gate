@@ -51,7 +51,9 @@ If your input was invalid, the operation will cancel.
 
 ## Bugs and Issues
 
-/
+Spotted: 25.12.2018
+Description: spoted in file "port_scanner.py", in function check_ports(). The port scanning does not stop when Ctrl+C is pressed.
+It seems it is a common issue with Pytohn threading. 
 
 ## Author
 
