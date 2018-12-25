@@ -13,18 +13,8 @@ class port_scanner:
     lock = threading.Lock() # Prevent double modification of shared variables.
     queue = queue.Queue()
 
-    open_ports_list = []
+    open_ports_list = []    # List of open ports
 
-    def server_input(self):
-        '''Function to enter server name. It also checks if the server input is valid.'''
-        self.server = input("Please enter website, server or IP address (format: 'www.hackthissite.org'): ")
-
-        try:    # Check if server input is valid.
-            self.server_IP = socket.gethostbyname(self.server)  # Get server IP
-        except socket.gaierror:
-            print("You did not enter a website, server or IP address.")
-            sys.exit()
-        
     def main(self):
         '''The main function for this class.'''
 
@@ -64,14 +54,24 @@ class port_scanner:
             con = s.connect((self.server_IP, port))
             with self.lock:
                 self.open_ports_list.append(port)
-                print("Port", port, "is open.")
+                print("Port %s is open." % port)
             con.close()
-        except KeyboardInterrupt:
+        except KeyboardInterrupt:   # BUG: Keyboard interrupt occasionally not working.
             print("Operation cancelled with Ctrl+C.")
             sys.exit()
         except:
-            print("Port", port, "is closed.")
+            print("Port %s is closed." % port)
 
+    def server_input(self):
+        '''Function to enter server name. It also checks if the server input is valid.'''
+        self.server = input("Please enter website, server or IP address (format: 'www.hackthissite.org'): ")
+
+        try:    # Check if server input is valid.
+            self.server_IP = socket.gethostbyname(self.server)  # Get server IP
+        except socket.gaierror:
+            print("You did not enter proper a website, server or IP address.")
+            sys.exit()
+        
     def threader(self):
         '''Threader function.'''
         while True:
