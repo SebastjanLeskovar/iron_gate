@@ -29,21 +29,27 @@ Please check the 'requirements.txt' file for an up-to-date list of prerequisites
 py iron_gate.py
 ```
 
-2. You can configure the variables "number_threads" and "number_jobs" in file "config.py". 
-The variable "number_jobs" will take into account how many ports would you like to scan, starting at 1. The total number of ports is 65.535 while the first 1024 ports are being reserved for privileged services and designed as well-known ports.
-Caution: scanning a higher number of ports will take longer; scanning 2500 ports took approx. 11 seconds and 5000 ports took approx. 24 seconds on a home PC.
+2. You can configure the variables "number_threads" and "number_jobs" in file "config.py".
 
+The variable "number_jobs" will take into account how many ports would you like to scan, starting at 1. The total number of ports is 65.535 while the first 1024 ports are being reserved for privileged services and designed as well-known ports.
+
+Caution: scanning a higher number of ports will take longer; scanning 2500 ports took approx. 11 seconds and 5000 ports took approx. 24 seconds on a home PC.
 The default values are 100 for "number_threads" and 1024 for "number_jobs". 
 
-3. The program asks you to insert the website you would like to scan. You can enter a server name, a website or an IP address. 
-Please insert the website in the following form: "www.example.com", e.g. "www.hackthissite.org".
-If your input was invalid, the operation will cancel. 
+3. Upon starting the program, you will be presented three options: 
+- Scan any server, website or IP address. 
+Please insert the website in the following form: "www.example.com", e.g. "www.hackthissite.org". 
+If your input for was invalid, the program will close. 
+
+- Scan your computer.
+In this case, the program will scan open ports on 'localhost', thus IP address being 127.0.0.1. 
+- Exit the scan.
 
 ## Versioning
 
 ### V2.0
 
-* GUI implementation.
+* Implementation of UI.
 
 ### V1.0
 

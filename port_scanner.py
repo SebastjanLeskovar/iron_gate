@@ -1,13 +1,13 @@
 import os
+import queue
 import socket
+import sys
+import subprocess
 import threading
 import time
 import config
-import sys
-import queue
-import subprocess
 
-class port_scanner:
+class port_scan:
     '''A class to seach for open ports.'''
 
     lock = threading.Lock() # Prevent double modification of shared variables.
@@ -15,17 +15,12 @@ class port_scanner:
 
     open_ports_list = []    # List of open ports
 
-    def main(self):
+    def main(self, host, host_ip):
         '''The main function for this class.'''
 
-        clear = lambda: os.system('cls')
-        clear()
-        
-        print("==== IRON GATE PROGRAM ====")
+        self.host_ip = host_ip
 
-        self.server_input()
-
-        print("---- Scanning server '%s' (IP: %s) ----." % (self.server, self.server_IP))
+        print("---- Scanning server '%s' (IP: %s) ----." % (host, host_ip))
         
         start_time = time.time()    # Start time
 
@@ -42,8 +37,7 @@ class port_scanner:
         total_time = round((time.time() - start_time), 2)
 
         print("---- Scan completed. ----")  # Finish info
-        print("Entire scan took %s seconds." % total_time)  # Time spent info
-        print("The following ports are open: %s." % self.open_ports_list)
+        print("The following ports are open: %s. Entire scan of %s ports took %s seconds." % (self.open_ports_list, config.number_jobs, total_time))
 
     def check_ports(self, port):
         '''Check for open ports.'''
@@ -51,7 +45,7 @@ class port_scanner:
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.settimeout(0.1)
         try:
-            con = s.connect((self.server_IP, port))
+            con = s.connect((self.host_ip, port))
             with self.lock:
                 self.open_ports_list.append(port)
                 print("Port %s is open." % port)
@@ -60,25 +54,12 @@ class port_scanner:
             print("Operation cancelled with Ctrl+C.")
             sys.exit()
         except:
-            print("Port %s is closed." % port)
+            pass
+            # print("Port %s is closed." % port)
 
-    def server_input(self):
-        '''Function to enter server name. It also checks if the server input is valid.'''
-        self.server = input("Please enter website, server or IP address (format: 'www.hackthissite.org'): ")
-
-        try:    # Check if server input is valid.
-            self.server_IP = socket.gethostbyname(self.server)  # Get server IP
-        except socket.gaierror:
-            print("You did not enter proper a website, server or IP address.")
-            sys.exit()
-        
     def threader(self):
         '''Threader function.'''
         while True:
             worker = self.queue.get()   # Get the worker from queue
             self.check_ports(worker)    # Run the worker on port scanner
             self.queue.task_done()      # Complete the job
-
-
-scan = port_scanner()
-scan.main()
