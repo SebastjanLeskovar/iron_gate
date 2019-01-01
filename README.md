@@ -36,16 +36,28 @@ The variable "number_jobs" will take into account how many ports would you like 
 Caution: scanning a higher number of ports will take longer; scanning 2500 ports took approx. 11 seconds and 5000 ports took approx. 24 seconds on a home PC.
 The default values are 100 for "number_threads" and 1024 for "number_jobs". 
 
-3. Upon starting the program, you will be presented three options: 
-- Scan any server, website or IP address. 
+3. Upon starting the program, you will be presented with five options: 
+* Scan any server, website or IP address. 
 Please insert the website in the following form: "www.example.com", e.g. "www.hackthissite.org". 
 If your input for was invalid, the program will close. 
-
-- Scan your computer.
+*-* Scan your computer.
 In this case, the program will scan open ports on 'localhost', thus IP address being 127.0.0.1. 
-- Exit the scan.
+* Send a GET request.
+Send a GET request to any website. The program will display the HTTP response code. It will also check if any redirects to the website are set. 
+* Request response header
+Displays the headers accompanying the HEAD request to the selected website. 
+* Exit the program.
 
 ## Versioning
+
+### V4.0
+
+* Implementation of GUI.
+
+### V3.0
+
+* Implementation of sending a GET reguest.
+* Obtaining Header information from a request. 
 
 ### V2.0
 
@@ -57,9 +69,14 @@ In this case, the program will scan open ports on 'localhost', thus IP address b
 
 ## Bugs and Issues
 
+Spoted: 01.01.2019
+Description: When running function 'host_input' after previously entering wrong address and selecting 'yes' afterwards, this function is run three times.
+Level: Error 
+
 Spotted: 25.12.2018
 Description: spoted in file "port_scanner.py", in function check_ports(). The port scanning does not stop when Ctrl+C is pressed.
-It seems it is a common issue with Pytohn threading. 
+It seems it is a common issue with Python threading. 
+Level: Error
 
 ## Author
 
