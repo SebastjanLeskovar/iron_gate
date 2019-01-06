@@ -1,6 +1,6 @@
 import requests
 
-class request_operations:
+class RequestOperations:
     '''Send HTTP/1.1 requests.'''
 
     def return_code(self, website):
@@ -8,6 +8,7 @@ class request_operations:
         
         req = requests.get(website)
         print("Status code: " + str(req.status_code))
+        # TODO: Display additional information about the code. More info can be found at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/200. 
 
         if req.history:  # Check for possible redirect codes. 
             for x in req.history:

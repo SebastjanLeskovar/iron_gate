@@ -7,7 +7,7 @@ import threading
 import time
 import config
 
-class port_scan:
+class PortScan:
     '''A class to seach for open ports.'''
 
     lock = threading.Lock() # Prevent double modification of shared variables.

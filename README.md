@@ -50,13 +50,23 @@ Displays the headers accompanying the HEAD request to the selected website.
 
 ## Versioning
 
-### V4.0
+### V5.0
 
 * Implementation of GUI.
 
+### V4.5
+
+* Re-structure the program (move data input to a different file in 'src').
+* Update the 'README.md' file.
+
+### V4.0
+
+* Option to obtain the public IP of the host.
+* Option to obtain the Windows IP and MAC addresses of the host.
+
 ### V3.0
 
-* Implementation of sending a GET reguest.
+* Option to send a GET reguest.
 * Obtaining Header information from a request. 
 
 ### V2.0

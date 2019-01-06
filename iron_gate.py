@@ -1,9 +1,9 @@
 import os
 import sys
 import socket
-from src import port_scanner, request_operations
+from src import port_scanner, request_operations, host
 
-class ui:
+class UI:
     '''UI menu for the user to define operations.'''
     
     def main_menu(self):
@@ -11,15 +11,15 @@ class ui:
         clear = lambda: os.system('cls')
         clear()
     
-        print("==== IRON GATE PROGRAM ====")
+        print("==== IRON GATE ====")
 
         while True:
-            input_1 = input("What would you like to do?\n1. Scan open ports on a server, website or IP address.\n2. Scan open ports on localhost.\n3. Send GET request.\n4. Request response header.\n5. Exit.\nPlease enter 1, 2, 3, 4 or 5: ")
+            input_1 = input("What would you like to do?\n1. Scan open ports on a server, website or IP address.\n2. Scan open ports on localhost.\n3. Send GET request.\n4. Request response header.\n5. Show Windows IP and MAC addresses.\n6. Show public IP.\n7. Exit.\nPlease enter 1, 2, 3, 4, 5, 6 or 7: ")
 
             if input_1 == "1":
                 self.host_input()
 
-                scan = port_scanner.port_scan()
+                scan = port_scanner.PortScan()
                 scan.main(self.chosen_host, self.chosen_host_ip)
                 break
 
@@ -27,23 +27,35 @@ class ui:
                 self.chosen_host = "localhost"
                 self.chosen_host_ip = "127.0.0.1"
                 
-                scan = port_scanner.port_scan()
+                scan = port_scanner.PortScan()
                 scan.main(self.chosen_host, self.chosen_host_ip)
                 break
 
             elif input_1 == "3":
                 self.website_input()
-                request = request_operations.request_operations()
+                request = request_operations.RequestOperations()
                 request.return_code(self.chosen_website)
                 break
 
             elif input_1 == "4":
                 self.website_input()
-                request = request_operations.request_operations()
+                request = request_operations.RequestOperations()
                 request.header_information(self.chosen_website)
                 break
-            
-            elif input_1 == "5":
+
+            elif input_1 == '5':
+                
+                h = host.Host()
+                h.get_windows_ip()
+                h.get_mac()
+                break
+
+            elif input_1 == '6':
+                public_ip = host.Host()
+                public_ip.get_public_ip()
+                break
+
+            elif input_1 == "7":
                 print("The program was closed.")
                 sys.exit()
 
@@ -61,12 +73,12 @@ class ui:
                 print("ERROR: You did not enter a proper a website, server or IP address.\nWould you like to start the scan again?")
                 
                 while True:
-                    self.input_2 = input("Please enter 'yes' to restart scanning or 'no' to cancel: ")
+                    input_2 = input("Please enter 'yes' to restart scanning or 'no' to cancel: ")
 
-                    if self.input_2 in ("yes", "y", "1"):
+                    if input_2 in ("yes", "y", "1"):
                         self.host_input()
                         break
-                    elif self.input_2 in ('no', 'n', '2'):
+                    elif input_2 in ('no', 'n', '2'):
                         print("The program was cancelled.")
                         sys.exit()
                     else:
@@ -82,9 +94,6 @@ class ui:
                 self.chosen_website = input_3
                 break
             
-            # TODO: In addition to the verification above, create another verification to check user's input.
-            # TODO: Ask the user to add 'http://' or /http://www' automatically.
-
             else:
                 print("ERROR: Your input did not start with 'htttp(s)://www'.\nWould you like to start the scan again?")
 
@@ -101,5 +110,7 @@ class ui:
                         print("ERROR: Wrong input.")
 
 
-auto_start = ui()
+auto_start = UI()
 auto_start.main_menu()
+
+# TODO: Start the program by using the standard formulation 'if __name__ == '__main__'.

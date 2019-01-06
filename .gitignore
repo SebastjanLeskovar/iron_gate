@@ -104,6 +104,7 @@ venv.bak/
 .mypy_cache/
 
 # Personal ignore list
-iron_gate.code-workspace
 gui.py
 pen_testing.py
+input.py
+resource_analysis.py
