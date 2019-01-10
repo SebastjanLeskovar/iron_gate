@@ -65,7 +65,7 @@ class UI:
     def host_input(self):
             '''Function to enter the host name. It also checks if the host input is valid.'''
             
-            self.chosen_host = input("Please enter a website, server or IP address you would like to scan. The format should be 'www.hackthissite.org' or '137.74.187.104'.\nWhat would you like to scan? ")
+            self.chosen_host = input("Please enter a website, server or IP address you would like to scan. The format should be 'www.example.com' or '137.74.187.104'.\nWhat would you like to scan? ")
 
             try:    # Check if server input is valid.
                 self.chosen_host_ip = socket.gethostbyname(self.chosen_host)
@@ -88,7 +88,7 @@ class UI:
         '''Enter a website address to which you would like to send a request.'''
 
         while True:
-            input_3 = input("Enter a website to send a request to. The format should be 'http://www.hackthissite.org' or '137.74.187.104'.\nAddress: ")
+            input_3 = input("Enter a website to send a request to. The format should be 'http://www.example.com' or '137.74.187.104'.\nAddress: ")
 
             if input_3.startswith(('http://www', 'https://www')):   # Check if input is in correct format.
                 self.chosen_website = input_3
@@ -109,8 +109,9 @@ class UI:
                     else:
                         print("ERROR: Wrong input.")
 
-
+# if '__name__' == '__main__':
+#     try:
 auto_start = UI()
 auto_start.main_menu()
-
-# TODO: Start the program by using the standard formulation 'if __name__ == '__main__'.
+    # except KeyboardInterrupt:
+    #     print("The program was closed by user.")
