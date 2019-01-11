@@ -20,7 +20,7 @@ class PortScan:
 
         self.host_ip = host_ip
 
-        print("---- Scanning server '%s' (IP: %s) ----." % (host, host_ip))
+        print("---- Scanning server '%s' (IP: %s) ----" % (host, host_ip))
         
         start_time = time.time()    # Start time
 
@@ -37,7 +37,7 @@ class PortScan:
         total_time = round((time.time() - start_time), 2)
 
         print("---- Scan completed. ----")  # Finish info
-        print("The following ports are open: %s. Entire scan of %s ports took %s seconds." % (self.open_ports_list, config.number_jobs, total_time))
+        print("The following ports are open: %s. \nEntire scan of %s ports took %s seconds." % (self.open_ports_list, config.number_jobs, total_time))
 
     def check_ports(self, port):
         '''Check for open ports.'''

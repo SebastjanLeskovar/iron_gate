@@ -29,36 +29,41 @@ Use Command Prompt to navigate to the root of the unziped folder (e.g., cd ...\i
 py iron_gate.py
 ```
 
-Upon starting the program, you will be presented with seven options: 
+Upon starting the program, you will be presented with seven options, divided into two groups: Website operations and Own system operations. 
+The options are: 
 
-1. Scan open ports on a server, website or IP address.
+<b>Analyse websites</b>
 
-This operation will show open ports on any server, website or other IP address. On the next step, the program will ask the user to usert chosen the website or IP address. The input format should be 'www.example.com' or '137.74.187.104'.
+1. Scan open ports.
 
-2. Scan open ports on localhost.
-
-The same operation as above, only the port scan is performed on the user's system. 
+This operation will show open ports of any website. The user is asked to choose a website. The program will first, validate the URL and second, check if the website exists.
+If the user's input is valid, all the open ports are displayed. 
 
 3. Send GET request.
 
-Send a GET request to any website. The program will display the HTTP response code. It will also check if any redirects to the website are set. 
+Send a GET request to any website. The user is asked to choose a website. The program will first, validate the URL and second, check if the website exists. After that, the HTTP response code will be displayed. The program will also check if any redirects to the website are set. 
 
 4. Request response header.
 
-The program will send a HEAD request to the selected website and display the response header. 
+The program will send a HEAD request to the selected website and display the response header. After the user's input is validated, he or she will be asked to choose a website. After that, the response header will be displayed.
+
+<b>Own system operations</b>
+
+2. Scan open ports on localhost.
+
+This operation will scan for open ports on the user's system. 
 
 5. Show Windows IP and MAC addresses.
 
-[to be updated]
+The program will display the Windows IP and MAC addresses of the user's system. 
 
 6. Show public IP.
 
-[to be updated]
+The program will display the public IP of the user's system.
 
 7. Exit.
 
 Exits the program. You can also exit the program at any time by pressing keys Ctrl + C.
-
 
 #### config.json
 
@@ -70,6 +75,8 @@ Caution: scanning a higher number of ports will take longer; scanning 2500 ports
 The default values are 100 for "number_threads" and 1024 for "number_jobs". 
 
 ## Versioning
+
+### V7.0
 
 * Implementation of GUI.
 
@@ -84,7 +91,7 @@ The default values are 100 for "number_threads" and 1024 for "number_jobs".
 
 ### V4.5
 
-* Re-structure the program (move data input to a different file in 'src').
+* Re-structure the program.
 * Update the 'README.md' file.
 
 ### V4.0

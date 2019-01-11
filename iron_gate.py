@@ -1,58 +1,79 @@
+import re
+import requests
 import os
 import sys
 import socket
-from src import port_scanner, request_operations, host
+import urllib.request
+import urllib.error
+from src import port_scan, request_operations, host_system
 
 class UI:
     '''UI menu for the user to define operations.'''
-    
+
+    '''Instructions'''
+
+    instructions_1 = "==== IRON GATE ====\n \
+    What would you like to do?\n \
+    --- Analyse websites ---\n \
+    1. Scan open ports.\n \
+    2. Send GET request.\n \
+    3. Request response header.\n \
+    --- Own system operations ---\n \
+    4. Scan open ports on localhost.\n \
+    5. Show Windows IP and MAC addresses.\n \
+    6. Show public IP.\n \
+    7. Exit."
+
+    option_1 = "Please enter a website you would like to scan. The input should contain the complete URL as in 'http://www.example.com'. You can cancel this operation with 'Ctrl+C' anytime." 
+
+    option_2 = "Please enter a website you would like to send a GET request to. The input should contain the complete URL as in 'http://www.example.com'. You can cancel this operation with 'Ctrl+C' anytime."
+
+    option_3 = "Please enter a website from which would you like to request a response header. The input should contain the complete URL as in 'http://www.example.com'. You can cancel this operation with 'Ctrl+C' anytime."
+
     def main_menu(self):
         
         clear = lambda: os.system('cls')
         clear()
-    
-        print("==== IRON GATE ====")
 
-        while True:
-            input_1 = input("What would you like to do?\n1. Scan open ports on a server, website or IP address.\n2. Scan open ports on localhost.\n3. Send GET request.\n4. Request response header.\n5. Show Windows IP and MAC addresses.\n6. Show public IP.\n7. Exit.\nPlease enter 1, 2, 3, 4, 5, 6 or 7: ")
+        print(self.instructions_1)
+
+        while True: 
+            input_1 = input("Please enter a number from 1 to 7: ")
 
             if input_1 == "1":
-                self.host_input()
-
-                scan = port_scanner.PortScan()
-                scan.main(self.chosen_host, self.chosen_host_ip)
+                self.website_input(self.option_1)
+                scan = port_scan.PortScan()
+                scan.main(self.stripped_selected_host, self.stripped_selected_host_ip)
                 break
 
             elif input_1 == "2":
-                self.chosen_host = "localhost"
-                self.chosen_host_ip = "127.0.0.1"
-                
-                scan = port_scanner.PortScan()
-                scan.main(self.chosen_host, self.chosen_host_ip)
+                self.website_input(self.option_2)
+                request = request_operations.RequestOperations()
+                request.return_code(self.selected_website)
                 break
 
             elif input_1 == "3":
-                self.website_input()
+                self.website_input(self.option_3)
                 request = request_operations.RequestOperations()
-                request.return_code(self.chosen_website)
+                request.header_information(self.selected_website)
                 break
 
             elif input_1 == "4":
-                self.website_input()
-                request = request_operations.RequestOperations()
-                request.header_information(self.chosen_website)
+                host = "localhost"
+                host_ip = "127.0.0.1"
+                scan = port_scan.PortScan()
+                scan.main(host, host_ip)
                 break
 
             elif input_1 == '5':
-                
-                h = host.Host()
+                h = host_system.HostSystem()
                 h.get_windows_ip()
                 h.get_mac()
                 break
 
             elif input_1 == '6':
-                public_ip = host.Host()
-                public_ip.get_public_ip()
+                p = host_system.HostSystem()
+                p.get_public_ip()
                 break
 
             elif input_1 == "7":
@@ -62,56 +83,60 @@ class UI:
             else:
                 print("ERROR: Wrong input.")
 
-    def host_input(self):
-            '''Function to enter the host name. It also checks if the host input is valid.'''
-            
-            self.chosen_host = input("Please enter a website, server or IP address you would like to scan. The format should be 'www.example.com' or '137.74.187.104'.\nWhat would you like to scan? ")
-
-            try:    # Check if server input is valid.
-                self.chosen_host_ip = socket.gethostbyname(self.chosen_host)
-            except socket.gaierror:
-                print("ERROR: You did not enter a proper a website, server or IP address.\nWould you like to start the scan again?")
-                
-                while True:
-                    input_2 = input("Please enter 'yes' to restart scanning or 'no' to cancel: ")
-
-                    if input_2 in ("yes", "y", "1"):
-                        self.host_input()
-                        break
-                    elif input_2 in ('no', 'n', '2'):
-                        print("The program was cancelled.")
-                        sys.exit()
-                    else:
-                        print("ERROR: Wrong input.")
-
-    def website_input(self):
-        '''Enter a website address to which you would like to send a request.'''
+    def website_input(self, option):
+        '''Function to enter the host name.'''
+        # TODO: Enable input of an IP address, not only website. 
+        
+        print(option)
 
         while True:
-            input_3 = input("Enter a website to send a request to. The format should be 'http://www.example.com' or '137.74.187.104'.\nAddress: ")
+            user_input = input("Website: ")
 
-            if input_3.startswith(('http://www', 'https://www')):   # Check if input is in correct format.
-                self.chosen_website = input_3
-                break
-            
-            else:
-                print("ERROR: Your input did not start with 'htttp(s)://www'.\nWould you like to start the scan again?")
+            if self.check_url_input(user_input) == True:
 
-                while True:
-                    input_4 = input("Please enter 'yes' to restart sending a request or 'no' to cancel: ")
+                if self.check_website_exists(user_input) == True:
 
-                    if input_4 in ("yes", "y", "1"):
-                        self.website_input()
+                    if user_input.endswith('/'):
+                        user_input = user_input[:-1]
+
+                    self.selected_website = user_input
+                    self.stripped_selected_host = user_input.replace('https://', '').replace('http://', '')
+                    
+                    try:
+                        self.stripped_selected_host_ip = socket.gethostbyname(self.stripped_selected_host)
                         break
-                    elif input_4 in ('no', 'n', '2'):
-                        print("The program was cancelled.")
-                        sys.exit()
-                    else:
-                        print("ERROR: Wrong input.")
+                    except socket.gaierror as error:
+                        print("ERROR: ", error)
 
-# if '__name__' == '__main__':
-#     try:
-auto_start = UI()
-auto_start.main_menu()
-    # except KeyboardInterrupt:
-    #     print("The program was closed by user.")
+
+
+
+    def check_url_input(self, input):
+        '''Check if the user's input contains a complete URL.'''
+        
+        if input.startswith(('http://', 'https://')):
+            return True
+        else:
+            print("Please enter a website starting with 'http://' or 'https://.'")
+            return False
+
+    def check_website_exists(self, input):
+        '''Check if the entered website exists.'''
+
+        try:
+            urllib.request.urlopen(input)
+            return True
+        except urllib.error.HTTPError as error:
+            print("ERROR: ", error)
+            return False
+        except urllib.error.URLError as error:
+            print("ERROR: ", error)
+            return False
+
+
+if __name__ == '__main__':
+    try:
+        auto_start = UI()
+        auto_start.main_menu()
+    except KeyboardInterrupt:
+        print("\nThe program was closed by user.")
